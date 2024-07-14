@@ -7,7 +7,7 @@ import sys
 
 
 def get_employee_todo_progress(employee_id):
-    base_url = "https://jsonplaceholder.typicode.com/"
+    base_url = "https://jsonplaceholder.typicode.com"
 
     user_response = requests.get("{}/users/{}".format(base_url, employee_id))
     if user_response.status_code != 200:
@@ -23,6 +23,7 @@ def get_employee_todo_progress(employee_id):
     if todos_response.status_code != 200:
         print("Error fetching TODO list for user with ID {}"
               .format(employee_id))
+        return
 
     todos_data = todos_response.json()
 
@@ -34,16 +35,22 @@ def get_employee_todo_progress(employee_id):
           .format(employee_name, number_of_done_tasks, total_tasks))
 
     for task in done_tasks:
-        print(f"\t {task.get('title')}")
+        print("\t {}".format(task.get('title')))
 
-    with open("{}.csv".format(employee_id),
-              mode='w', newline='') as file:
+    with open("{}.csv".format(employee_id), mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["USER_ID", "USERNAME",
-                         "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+        writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS",
+                         "TASK_TITLE"])
         for task in todos_data:
-            writer.writerow([employee_id, username,
-                             task.get('completed'), task.get('title')])
+            writer.writerow([employee_id, username, task.get('completed'),
+                             task.get('title')])
+
+    with open("{}.csv".format(employee_id), mode='r') as file:
+        reader = csv.reader(file)
+        tasks_in_csv = sum(1 for row in reader) - 1
+        if tasks_in_csv != total_tasks:
+            print("Warning: Number of tasks in CSV ({}) does not match the "
+                  "expected count ({}).".format(tasks_in_csv, total_tasks))
 
 
 if __name__ == "__main__":
