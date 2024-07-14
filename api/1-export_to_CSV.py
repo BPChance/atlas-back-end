@@ -38,16 +38,14 @@ def get_employee_todo_progress(employee_id):
         print("\t {}".format(task.get('title')))
 
     with open("{}.csv".format(employee_id), mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS",
-                         "TASK_TITLE"])
+        writer = csv.writer(file, quoting=csv.QUOTE_ALL)
         for task in todos_data:
-            writer.writerow([employee_id, username, task.get('completed'),
+            writer.writerow([employee_id, employee_name, task.get('completed'),
                              task.get('title')])
 
     with open("{}.csv".format(employee_id), mode='r') as file:
         reader = csv.reader(file)
-        tasks_in_csv = sum(1 for row in reader) - 1
+        tasks_in_csv = sum(1 for row in reader)
         if tasks_in_csv != total_tasks:
             print("Warning: Number of tasks in CSV ({}) does not match the "
                   "expected count ({}).".format(tasks_in_csv, total_tasks))
