@@ -16,9 +16,11 @@ def get_employee_todo_progress(employee_id):
     user_data = user_response.json()
     employee_name = user_data.get('name')
 
-    todos_response = requests.get("{}/todos?userId={}".format(base_url, employee_id))
+    todos_response = requests.get("{}/todos?userId={}"
+                                  .format(base_url, employee_id))
     if todos_response.status_code != 200:
-        print("Error fetching TODO list for user with ID {}".format(employee_id))
+        print("Error fetching TODO list for user with ID {}"
+              .format(employee_id))
 
     todos_data = todos_response.json()
 
@@ -26,10 +28,12 @@ def get_employee_todo_progress(employee_id):
     done_tasks = [task for task in todos_data if task.get('completed')]
     number_of_done_tasks = len(done_tasks)
 
-    print("Employee {} is done with tasks({}/{}):".format(employee_name, number_of_done_tasks, total_tasks))
+    print("Employee {} is done with tasks({}/{}):"
+          .format(employee_name, number_of_done_tasks, total_tasks))
 
     for task in done_tasks:
         print(f"\t {task.get('title')}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
