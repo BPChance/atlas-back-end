@@ -15,8 +15,9 @@ def get_employee_todo_progress(employee_id):
         return
 
     user_data = user_response.json()
-    employee_name = user_data.get('name')
     username = user_data.get('username')
+
+    print("User ID: {}, Username: {}".format(employee_id, username))
 
     todos_response = requests.get("{}/todos?userId={}"
                                   .format(base_url, employee_id))
@@ -32,7 +33,7 @@ def get_employee_todo_progress(employee_id):
     number_of_done_tasks = len(done_tasks)
 
     print("Employee {} is done with tasks({}/{}):"
-          .format(employee_name, number_of_done_tasks, total_tasks))
+          .format(username, number_of_done_tasks, total_tasks))
 
     for task in done_tasks:
         print("\t {}".format(task.get('title')))
@@ -40,7 +41,7 @@ def get_employee_todo_progress(employee_id):
     with open("{}.csv".format(employee_id), mode='w', newline='') as file:
         writer = csv.writer(file, quoting=csv.QUOTE_ALL)
         for task in todos_data:
-            writer.writerow([employee_id, employee_name, task.get('completed'),
+            writer.writerow([employee_id, username, task.get('completed'),
                              task.get('title')])
 
     with open("{}.csv".format(employee_id), mode='r') as file:
