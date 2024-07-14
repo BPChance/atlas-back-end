@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ script that gathers data from an api """
 
+import json
 import requests
 import sys
-import json
 
 
 def get_employee_todo_progress(employee_id):
@@ -18,9 +18,11 @@ def get_employee_todo_progress(employee_id):
     employee_name = user_data.get('name')
     username = user_data.get('username')
 
-    todos_response = requests.get("{}/todos?userId={}".format(base_url, employee_id))
+    todos_response = requests.get("{}/todos?userId={}"
+                                  .format(base_url, employee_id))
     if todos_response.status_code != 200:
-        print("Error fetching TODO list for user with ID {}".format(employee_id))
+        print("Error fetching TODO list for user with ID {}"
+              .format(employee_id))
 
     todos_data = todos_response.json()
 
@@ -28,12 +30,14 @@ def get_employee_todo_progress(employee_id):
     done_tasks = [task for task in todos_data if task.get('completed')]
     number_of_done_tasks = len(done_tasks)
 
-    print("Employee {} is done with tasks({}/{}):".format(employee_name, number_of_done_tasks, total_tasks))
+    print("Employee {} is done with tasks({}/{}):"
+          .format(employee_name, number_of_done_tasks, total_tasks))
 
     for task in done_tasks:
         print(f"\t {task.get('title')}")
 
-    tasks = [{"task": task.get('title'), "completed": task.get('completed'), "username": username} for task in todos_data]
+    tasks = [{"task": task.get('title'),
+              "completed": task.get('completed'), "username": username} for task in todos_data]
     json_data = {str(employee_id): tasks}
 
     with open("{}.json".format(employee_id), 'w') as json_file:
