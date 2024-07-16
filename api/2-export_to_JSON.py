@@ -37,7 +37,9 @@ def get_employee_todo_progress(employee_id):
         print(f"\t {task.get('title')}")
 
     tasks = [{"task": task.get('title'),
-              "completed": task.get('completed'), "username": username} for task in todos_data]
+              "completed": task.get('completed'),
+              "username": username} for task in todos_data]
+
     json_data = {str(employee_id): tasks}
 
     with open("{}.json".format(employee_id), 'w') as json_file:
