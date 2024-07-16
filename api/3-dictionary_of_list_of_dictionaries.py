@@ -39,6 +39,7 @@ def get_employee_todo_progress(employee_id):
 
     return employee_name, employee_tasks
 
+
 def export_all_tasks():
     base_url = "https://jsonplaceholder.typicode.com"
     all_employee_tasks = {}
