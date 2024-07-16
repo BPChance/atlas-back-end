@@ -39,6 +39,7 @@ def get_employee_todo_progress(employee_id):
 
     return employee_name, employee_tasks
 
+
 def export_all_tasks():
     base_url = "https://jsonplaceholder.typicode.com"
     all_employee_tasks = {}
@@ -52,6 +53,7 @@ def export_all_tasks():
         json.dump(all_employee_tasks, f, indent=2)
 
     print("Data exported to todo_all_employees.json")
+
 
 if __name__ == "__main__":
     export_all_tasks()
